@@ -18,7 +18,7 @@ class TaskController extends AbstractController
     {
         $this->pdo = New PDO('mysql:host=localhost;dbname=steden',
             "root",
-            "Wh3nP7agu35");
+            "");
     }
 
     /**
