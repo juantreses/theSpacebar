@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Citytips{% endblock %}
+{% block body %}
+    <div class="container">
+        <div class="row">
+            {% for rows in data %}
+                <div class="col-sm-4">
+                    <h3>{{ rows.img_title }}</h3>
+
+                    <p>Een beetje tekst</p>
+
+                    <a href="stad_form.php?id={{rows.img_id}}">
+                        <img class="img-fluid" src=images/{{rows.img_filename}}.jpg>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script src="{{ asset('js/article_show.js') }}"></script>
+{% endblock %}
