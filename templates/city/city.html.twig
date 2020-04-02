@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="col-sm-4 float_left">
+
+    <form>
+        <div class="form-group">
+            <label for="img_id" class="col-form-label">Id</label>
+            <div>
+                <input readonly type="text" class="form-control" id="img_id" name="img_id" value={{ data.img_id }}>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="img_title" class="col-form-label">Title</label>
+            <div>
+                <input readonly type="text" class="form-control" id="img_title" name="img_title" value={{ data.img_title }}>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="img_width" class="col-form-label">Width</label>
+            <div>
+                <input readonly type="text" class="form-control" id="img_width" name="img_width" value={{ data.img_width }}>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="img_height" class="col-form-label">Height</label>
+            <div>
+                <input readonly type="text" class="form-control" id="img_height" name="img_height" value={{ data.img_height }}>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="img_filename" class="col-form-label">Filename</label>
+            <div>
+                <input readonly type="text" class="form-control" id="img_filename" name="img_filename" value={{ data.img_filename }}>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="col-sm-8 float_left">
+    <img class="img-fluid img_city" src=/images/{{data.img_filename}}.jpg>
+</div>
+{% endblock %}

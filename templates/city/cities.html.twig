@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Citytips{% endblock %}
+{% block body %}
+    <div class="container">
+        <div class="row">
+            {% for row in data %}
+                <div class="col-sm-4">
+                    <h3>{{ row.img_title }}</h3>
+
+                    <p>Een beetje tekst</p>
+
+                    <a href="/stad/{{row.img_id}}">
+                        <img class="img-fluid" src=images/{{row.img_filename}}.jpg>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

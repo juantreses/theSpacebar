@@ -37,14 +37,27 @@ class CityController extends AbstractController
     }
 
     /**
-     * @Route("/steden", name="app_citypage")
+     * @Route("/steden", name="app_citiespage")
      */
-    public function citypage()
+    public function citiespage()
     {
        $cities = $this->getData("SELECT * FROM images");
 
-        return $this->render('city/show.html.twig', [
+        return $this->render('city/cities.html.twig', [
             'data' => $cities
+        ]);
+    }
+
+    /**
+     * @Route("/stad/{id}")
+     */
+    public function citypage($id)
+    {
+        $city = $this->getData("SELECT * FROM images WHERE img_id = $id");
+
+
+        return $this->render('city/city.html.twig', [
+            'data' => $city[0]
         ]);
     }
 }
