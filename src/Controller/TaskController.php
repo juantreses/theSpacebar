@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\DatabaseService;
 use PDO;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,13 +13,11 @@ use Twig\Environment;
 
 class TaskController extends AbstractController
 {
-    private $pdo;
+    private $dbService;
 
-    public function __construct()
+    public function __construct(DatabaseService $databaseService)
     {
-        $this->pdo = New PDO('mysql:host=localhost;dbname=steden',
-            "root",
-            "");
+        $this->dbService = $databaseService;
     }
 
     /**
@@ -26,12 +25,9 @@ class TaskController extends AbstractController
      */
     public function getTaken()
     {
-        $stm = $this->pdo->prepare('SELECT * FROM taak');
-        $stm->execute();
+        $rows = $this->dbService->getData('SELECT * FROM taak');
 
-        $rows = $stm->fetchAll(PDO::FETCH_ASSOC);
         return new JsonResponse($rows);
-
     }
 
     /**
@@ -44,8 +40,7 @@ class TaskController extends AbstractController
 
         $sql = "INSERT INTO taak SET taa_datum = '$data->taa_datum', taa_omschr = '$data->taa_omschr'";
 
-        $stm = $this->pdo->prepare($sql);
-        if ($stm->execute()) {
+        if ($this->dbService->executeSQL($sql)) {
             $response =  new JsonResponse("Your task was added");
         }
         else {
@@ -60,10 +55,7 @@ class TaskController extends AbstractController
      */
     public function getTaak($id)
     {
-        $stm = $this->pdo->prepare("SELECT * FROM taak WHERE taa_id = $id");
-        $stm->execute();
-
-        $rows = $stm->fetchAll(PDO::FETCH_ASSOC);
+        $rows = $this->dbService->getData("SELECT * FROM taak WHERE taa_id = $id");
         return new JsonResponse($rows);
     }
 
@@ -76,8 +68,7 @@ class TaskController extends AbstractController
 
         $sql = "Update taak SET taa_datum = '$data->taa_datum', taa_omschr = '$data->taa_omschr' WHERE taa_id = '$id'";
 
-        $stm = $this->pdo->prepare($sql);
-        if ($stm->execute()) {
+        if ($this->dbService->executeSQL($sql)) {
             $response = new JsonResponse("Your task was updated");
         } else {
             $response = new JsonResponse("Something went wrong");
@@ -91,8 +82,7 @@ class TaskController extends AbstractController
      */
     public function deleteTaak($id)
     {
-        $stm = $this->pdo->prepare("DELETE FROM taak WHERE taa_id = $id");
-        if ($stm->execute()) {
+        if ($this->dbService->executeSQL("DELETE FROM taak WHERE taa_id = $id")) {
             $response = new JsonResponse("Your task was deleted");
         }
         else {

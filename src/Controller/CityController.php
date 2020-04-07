@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\DatabaseService;
 use Michelf\MarkdownInterface;
 use PDO;
 use Psr\Log\LoggerInterface;
@@ -14,26 +15,11 @@ use Twig\Environment;
 
 class CityController extends AbstractController
 {
-    private $pdo;
+    private $dbService;
 
-    public function __construct()
+    public function __construct(DatabaseService $dbService)
     {
-        $this->pdo = New PDO('mysql:host=localhost;dbname=steden',
-            "root",
-            "Wh3nP7agu35");
-    }
-
-    /**
-     * @param string $sql
-     * @return mixed
-     */
-    public function getData($sql)
-    {
-        $stm = $this->pdo->prepare($sql);
-        $stm->execute();
-
-        $rows = $stm->fetchAll(PDO::FETCH_ASSOC);
-        return $rows;
+        $this->dbService = $dbService;
     }
 
     /**
@@ -41,7 +27,7 @@ class CityController extends AbstractController
      */
     public function citiespage()
     {
-       $cities = $this->getData("SELECT * FROM images");
+       $cities = $this->dbService->getData("SELECT * FROM images");
 
         return $this->render('city/cities.html.twig', [
             'data' => $cities
@@ -51,9 +37,9 @@ class CityController extends AbstractController
     /**
      * @Route("/stad/{id}")
      */
-    public function citypage($id)
+    public function citypage($id, DatabaseService $databaseService)
     {
-        $city = $this->getData("SELECT * FROM images WHERE img_id = $id");
+        $city = $this->dbService->getData("SELECT * FROM images WHERE img_id = $id");
 
 
         return $this->render('city/city.html.twig', [
