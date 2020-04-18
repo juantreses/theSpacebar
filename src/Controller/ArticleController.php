@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Service\MarkdownHelper;
+use App\Service\SlackClient;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -12,6 +13,7 @@ use Twig\Environment;
 
 class ArticleController extends AbstractController
 {
+
     /**
      * @Route("/", name="app_homepage")
      */
@@ -23,8 +25,11 @@ class ArticleController extends AbstractController
     /**
      * @Route("/news/{slug}", name="arcticle_show")
      */
-    public function show($slug, MarkdownHelper &$markdownHelper)
+    public function show($slug, MarkdownHelper $markdownHelper, SlackClient $slack)
     {
+        if ($slug == 'khaaaan') {
+            $slack->sendMessage('Khan', 'Ah, Kirk, my old friend...');
+        }
         $comments = [
           'I ate a normal rock once. It did NOT taste like bacon!',
           'Woohoo! I\'m going on an all-asteroid diet!',
