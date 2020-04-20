@@ -32,19 +32,10 @@ class ArticleController extends AbstractController
     /**
      * @Route("/news/{slug}", name="arcticle_show")
      */
-    public function show($slug, SlackClient $slack, EntityManagerInterface $em)
+    public function show(Article $article, SlackClient $slack)
     {
-        if ($slug == 'khaaaan') {
+        if ($article->getSlug() == 'khaaaan') {
             $slack->sendMessage('Khan', 'Ah, Kirk, my old friend...');
-        }
-
-        $repository = $em->getRepository(Article::class);
-        /**
-         * @var Article $article
-         */
-        $article = $repository->findOneBy(['slug' => $slug]);
-        if (!$article) {
-            throw $this->createNotFoundException(sprintf('No article for slug "%s"', $slug));
         }
 
         $comments = [
@@ -62,12 +53,13 @@ class ArticleController extends AbstractController
     /**
      * @Route("/news/{slug}/heart", name="article_toggle_heart", methods={"POST"})
      */
-    public function toggleArticleHeart($slug, LoggerInterface $logger)
+    public function toggleArticleHeart(Article $article, LoggerInterface $logger, EntityManagerInterface $em)
     {
-        //TODO - actually heart/unheart the article
+        $article->incrementHeartCount();
+        $em->flush();
 
         $logger->info("article is being hearted");
 
-        return new JsonResponse(['hearts' => rand(5, 100)]);
+        return new JsonResponse(['hearts' => $article->getHeartCount()]);
     }
 }
